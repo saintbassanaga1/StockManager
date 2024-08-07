@@ -73,7 +73,7 @@ publishing {
                 licenses {
                     license {
                         name.set('Proprietary License')
-                        //url.set('https://opensource.org/licenses/MIT')
+                        url.set('https://github.com/saintbassanaga/StockManager/blob/5ca6c6e6dd1df14cb0af10b874897cef040ea8f8/License.md')
                         distribution.set('repo')
                     }
                 }
