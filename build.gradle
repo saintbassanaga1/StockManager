@@ -1,5 +1,3 @@
-import org.gradle.api.plugins.internal.DefaultJavaPluginExtension
-
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.2'
@@ -62,9 +60,6 @@ bootJar {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            groupId = 'tech.saintbassanaga'
-            artifactId = 'StockManager'
-            version = '1.0-SNAPSHOT'
             from components.java
             pom {
                 name.set('Stock Manager')
@@ -97,8 +92,8 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/saintbassanaga/StockManager")
             credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-                password = project.findProperty("gpr.token") ?: System.getenv("TOKEN")
+                username = project.findProperty("gpr.user") ?: System.getenv("GIT_USERNAME")
+                password = project.findProperty("gpr.token") ?: System.getenv("GIT_TOKEN")
             }
         }
     }
