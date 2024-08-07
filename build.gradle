@@ -72,8 +72,8 @@ publishing {
                 url.set('https://github.com/saintbassanaga/StockManager')
                 licenses {
                     license {
-                        name.set('The MIT License')
-                        url.set('https://opensource.org/licenses/MIT')
+                        name.set('Proprietary License')
+                        //url.set('https://opensource.org/licenses/MIT')
                         distribution.set('repo')
                     }
                 }
