@@ -1,11 +1,4 @@
-package tech.saintbassanaga.stockmanager.models;
-
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import tech.saintbassanaga.stockmanager.models.embedded.ProductStatus;
-
-import java.math.BigDecimal;
+package tech.saintbassanaga.stockmanager.config.exceptions;
 
 /*
  * MIT License
@@ -30,21 +23,8 @@ import java.math.BigDecimal;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-@Getter
-@Setter
-@Entity
-@Table(name = "product")
-public class Product extends AbstractEntity {
-    private String name;
-    private String description;
-    private BigDecimal price;
-
-    @Enumerated(EnumType.STRING)
-    private ProductStatus status;
-
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "manufacturer_uuid", nullable = false)
-    private Supplier supplier;
-
+public class SupplierNotFoundException extends RuntimeException {
+    public SupplierNotFoundException(String message) {
+        super(message);
+    }
 }

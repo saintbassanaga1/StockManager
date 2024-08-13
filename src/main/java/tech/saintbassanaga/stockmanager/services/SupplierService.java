@@ -1,13 +1,12 @@
-package tech.saintbassanaga.stockmanager.models;
+package tech.saintbassanaga.stockmanager.services;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import tech.saintbassanaga.stockmanager.models.embedded.Address;
-import tech.saintbassanaga.stockmanager.models.embedded.Contact;
+import org.springframework.stereotype.Service;
+import tech.saintbassanaga.stockmanager.dtos.CreateSupplierDto;
+import tech.saintbassanaga.stockmanager.dtos.ShortSupplierDto;
+import tech.saintbassanaga.stockmanager.models.Supplier;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /*
  * MIT License
@@ -32,23 +31,12 @@ import java.util.List;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-@Getter
-@Setter
-@Entity
-@Table(name = "manufacturer")
-public class Manufacturer extends AbstractEntity {
-
-    private String designation;
-
-    private String Description;
-
-    @Embedded
-    private Contact contact;
-    @Embedded
-    private Address address;
-
-    @OneToMany(mappedBy = "manufacturer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> products = new ArrayList<>();
-
+public interface SupplierService {
+    public List<ShortSupplierDto> findSupplierByName(String supplierName);
+    public List<ShortSupplierDto> findAllSuppliers();
+    public ShortSupplierDto findSupplierById(UUID supplierId);
+    public void deleteSupplierById(UUID supplierId);
+    public Supplier createSupplier(CreateSupplierDto supplierDto);
+    public ShortSupplierDto updateSupplier(UUID uuid, CreateSupplierDto supplierDto);
+    public List<ShortSupplierDto> findSupplierByCity(String city);
 }

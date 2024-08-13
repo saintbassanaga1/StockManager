@@ -1,11 +1,18 @@
 package tech.saintbassanaga.stockmanager.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import tech.saintbassanaga.stockmanager.models.embedded.ProductStatus;
+import tech.saintbassanaga.stockmanager.dtos.ContactDto;
+import tech.saintbassanaga.stockmanager.dtos.CreateSupplierDto;
+import tech.saintbassanaga.stockmanager.models.embedded.Address;
+import tech.saintbassanaga.stockmanager.models.embedded.Contact;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * MIT License
@@ -34,17 +41,21 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
-@Table(name = "product")
-public class Product extends AbstractEntity {
-    private String name;
-    private String description;
-    private BigDecimal price;
+@Table(name = "supplier")
+@AllArgsConstructor
+@NoArgsConstructor
+public class Supplier extends AbstractEntity {
 
-    @Enumerated(EnumType.STRING)
-    private ProductStatus status;
+    private String designation;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "manufacturer_uuid", nullable = false)
-    private Supplier supplier;
+    private String Description;
+
+    @Embedded
+    private Contact contact;
+    @Embedded
+    private Address address;
+
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products = new ArrayList<>();
 
 }
