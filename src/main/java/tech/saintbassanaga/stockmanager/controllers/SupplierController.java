@@ -1,18 +1,22 @@
 package tech.saintbassanaga.stockmanager.controllers;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.EnableMBeanExport;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tech.saintbassanaga.stockmanager.config.exceptions.ErrorResponse;
+import tech.saintbassanaga.stockmanager.dtos.CreateSupplierDto;
 import tech.saintbassanaga.stockmanager.dtos.ShortSupplierDto;
+import tech.saintbassanaga.stockmanager.models.Supplier;
 import tech.saintbassanaga.stockmanager.services.SupplierService;
 
+import java.util.List;
 import java.util.UUID;
 
 /*
@@ -38,20 +42,70 @@ import java.util.UUID;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-@RestController()
+@RestController
 @AllArgsConstructor
-@RequestMapping(name = "supplier",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping("api/suppliers/")
 public class SupplierController {
+
     private final SupplierService supplierService;
 
-    @ApiOperation(value = "Get Supplier by UUID", notes = "Retrieve supplier details using UUID")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Supplier details retrieved successfully", response = ShortSupplierDto.class),
-            @ApiResponse(code = 404, message = "Supplier not found"),
-            @ApiResponse(code = 500, message = "Internal server error")
-    })
-    @GetMapping(value = "/{uuid}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ShortSupplierDto getSupplierByUuid(@PathVariable UUID uuid) {
-        return supplierService.findSupplierById(uuid);
+    /**
+     * @param dto "Supplier Data to be persisted to DataBase"
+     * @return "an ResponseEntity of created Supplier"
+     */
+    @Operation(summary = "Create a new supplier", description = "Adds a new supplier to the system")
+    @ApiResponse(responseCode = "200", description = "Successfully Created Supplier",
+            content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ShortSupplierDto.class))
+    )
+    @PostMapping("/add")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Supplier> createSupplier(@RequestBody CreateSupplierDto dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(supplierService.createSupplier(dto));
     }
+
+    /**
+     * @param uuid "Supplier ID"
+     * @return "An ResponseEntity of Found Supplier or just an Error message if not"
+     */
+    @Operation(summary = "Get Supplier by UUID", description = "Retrieve supplier details using UUID")
+    @ApiResponse(responseCode = "302", description = "Successfully retrieved Supplier"
+            , content = @Content(mediaType = "application/json"
+            , schema = @Schema(implementation = ShortSupplierDto.class))
+    )
+    @ResponseStatus(HttpStatus.FOUND)
+    @GetMapping(value = "/{uuid}")
+    public ResponseEntity<ShortSupplierDto> getSupplierByUuid(@PathVariable UUID uuid) {
+        return ResponseEntity.status(HttpStatus.FOUND).body(supplierService.findSupplierById(uuid));
+    }
+
+    @Operation(summary = "Find All supplier", description = " This method is used to find all data about a short supplier present in th database")
+    @ApiResponse(responseCode = "302", description = "All suppliers have been loaded successfully !",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ShortSupplierDto.class))
+    )
+    @GetMapping("/")
+    public ResponseEntity<List<ShortSupplierDto>> getAllSuppliers() {
+        return ResponseEntity.status(HttpStatus.FOUND).body(supplierService.findAllSuppliers());
+    }
+
+    @Operation(summary = "Find supplier in city", description = "This method find supplier logged in a specifics city")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "All suppliers have been loaded successfully!",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ShortSupplierDto.class))
+            ),
+            @ApiResponse(responseCode = "404", description = "No supplier found for the given city",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+            ),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+            )
+    })
+    @GetMapping("/city/{city}")
+    public ResponseEntity<List<ShortSupplierDto>> getAllSuppliersByCity(@PathVariable("city") String city) {
+        return ResponseEntity.status(HttpStatus.FOUND).body(supplierService.findSupplierByCity(city));
+    }
+
+
+
+
 }

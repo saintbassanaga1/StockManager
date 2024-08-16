@@ -10,6 +10,7 @@ import tech.saintbassanaga.stockmanager.repositories.SupplierRepository;
 import tech.saintbassanaga.stockmanager.services.SupplierService;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -39,70 +40,13 @@ import java.util.stream.Collectors;
  */
 
 @Service
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 public class SupplierServiceImpls implements SupplierService {
 
     private final SupplierRepository supplierRepository;
     public SupplierServiceImpls(SupplierRepository supplierRepository) {
         this.supplierRepository = supplierRepository;
     }
+
     @Override
     public List<ShortSupplierDto> findSupplierByName(String supplierName) {
         return supplierRepository.findByDesignationContaining(supplierName)
@@ -124,9 +68,7 @@ public class SupplierServiceImpls implements SupplierService {
     public ShortSupplierDto findSupplierById(UUID supplierId) {
         return supplierRepository.findById(supplierId)
                 .map(DtosMapper::fromEntity)
-                .orElseThrow(
-                        ()-> new SupplierNotFoundException("Supplier Not Found with Id: " + supplierId)
-                );
+                .orElseThrow(()-> new SupplierNotFoundException("Supplier Not Found with Id: " + supplierId));
     }
 
     @Override
@@ -136,6 +78,7 @@ public class SupplierServiceImpls implements SupplierService {
 
     @Override
     public Supplier createSupplier(CreateSupplierDto supplierDto) {
+        System.out.println(DtosMapper.toEntity(supplierDto));
         return supplierRepository.save(DtosMapper.toEntity(supplierDto)) ;
     }
 
@@ -151,8 +94,10 @@ public class SupplierServiceImpls implements SupplierService {
 
     @Override
     public List<ShortSupplierDto> findSupplierByCity(String city) {
+        String normalizedCity = city.toLowerCase(Locale.ROOT);
+
         // Retrieve suppliers by city, map to DTOs, and handle absence
-        return supplierRepository.findSuppliersByAddress_City(city)
+        return supplierRepository.findSuppliersByAddress_City(normalizedCity)
                 .map(suppliers -> suppliers.stream()
                         .map(DtosMapper::fromEntity)
                         .collect(Collectors.toList()))

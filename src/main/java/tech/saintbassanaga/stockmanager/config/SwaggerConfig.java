@@ -40,7 +40,11 @@ import org.springframework.context.annotation.Configuration;
                         email = "saintbassanaga01@icloud.com",
                         url = ""
                 ),
-                description = "The stock manager project is a web-based application for tracking inventory, managing stock levels, and generating reports",
+                description = "The Stock Manager project is a sophisticated web-based application " +
+                        "designed to streamline inventory management for businesses of all sizes. " +
+                        "It provides an intuitive platform for tracking stock levels,\n" +
+                        " managing inventory, and generating insightful reports, " +
+                        "facilitating efficient operations and informed decision-making.",
                 version = "v1.1",
                 license = @License(
                         name = "Copyright",
@@ -48,10 +52,6 @@ import org.springframework.context.annotation.Configuration;
                         url = "https://github.com/saintbassanaga/StockManager/blob/5ca6c6e6dd1df14cb0af10b874897cef040ea8f8/License.md"
                 ),
                 termsOfService = "Proprietary"
-        ),
-        servers = @Server(
-                url = "localhost:8080/swagger-ui",
-                description = ""
         )
 
 )

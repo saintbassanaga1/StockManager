@@ -1,11 +1,4 @@
-package tech.saintbassanaga.stockmanager.models;
-
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import tech.saintbassanaga.stockmanager.models.embedded.ProductStatus;
-
-import java.math.BigDecimal;
+package tech.saintbassanaga.stockmanager.config.exceptions;
 
 /*
  * MIT License
@@ -30,21 +23,22 @@ import java.math.BigDecimal;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@Getter
-@Setter
-@Entity
-@Table(name = "product")
-public class Product extends AbstractEntity {
-    private String name;
-    private String description;
-    private BigDecimal price;
+@RestControllerAdvice
+public class GlobalExceptionHandler {
 
-    @Enumerated(EnumType.STRING)
-    private ProductStatus status;
+    @ExceptionHandler(SupplierNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<ErrorResponse> handleSupplierNotFoundException(SupplierNotFoundException ex) {
+        ErrorResponse errorResponse = new ErrorResponse("Supplier Not Found", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "supplier_uuid", nullable = false)
-    private Supplier supplier;
-
+    // You can add more exception handlers here as needed
 }
+

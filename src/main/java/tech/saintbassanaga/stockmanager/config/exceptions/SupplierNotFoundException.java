@@ -1,5 +1,4 @@
 package tech.saintbassanaga.stockmanager.config.exceptions;
-
 /*
  * MIT License
  *
@@ -23,6 +22,10 @@ package tech.saintbassanaga.stockmanager.config.exceptions;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 public class SupplierNotFoundException extends RuntimeException {
     public SupplierNotFoundException(String message) {
         super(message);

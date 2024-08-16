@@ -49,7 +49,7 @@ public abstract class AbstractEntity {
     private LocalDateTime createdDate;
 
     @LastModifiedDate
-    @Column(nullable = false, insertable = false)
-    private LocalDateTime LastModifiedDate;
+    @Column(insertable = false, nullable = true)
+    private LocalDateTime lastModifiedDate;
 
 }

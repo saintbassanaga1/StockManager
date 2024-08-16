@@ -1,13 +1,12 @@
 package tech.saintbassanaga.stockmanager.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import tech.saintbassanaga.stockmanager.dtos.ContactDto;
-import tech.saintbassanaga.stockmanager.dtos.CreateSupplierDto;
 import tech.saintbassanaga.stockmanager.models.embedded.Address;
 import tech.saintbassanaga.stockmanager.models.embedded.Contact;
 
@@ -40,17 +39,28 @@ import java.util.List;
 
 @Getter
 @Setter
-@Entity
+@Entity(name="Supplier")
 @Table(name = "supplier")
-@AllArgsConstructor
-@NoArgsConstructor
 public class Supplier extends AbstractEntity {
 
     private String designation;
 
+    @Override
+    public String toString() {
+        return "Supplier{" +
+                "designation='" + designation + '\'' +
+                ", Description='" + Description + '\'' +
+                ", contact=" + contact +
+                ", address=" + address +
+                ", products=" + products +
+                '}';
+    }
+
+    @NotNull
     private String Description;
 
     @Embedded
+    @NotNull
     private Contact contact;
     @Embedded
     private Address address;

@@ -1,12 +1,4 @@
-package tech.saintbassanaga.stockmanager.models;
-
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import tech.saintbassanaga.stockmanager.models.embedded.ProductStatus;
-
-import java.math.BigDecimal;
-
+package tech.saintbassanaga.stockmanager.config.exceptions;
 /*
  * MIT License
  *
@@ -31,20 +23,19 @@ import java.math.BigDecimal;
  * SOFTWARE.
  */
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Getter
 @Setter
-@Entity
-@Table(name = "product")
-public class Product extends AbstractEntity {
-    private String name;
-    private String description;
-    private BigDecimal price;
+public class ErrorResponse {
+    private String error;
+    private String message;
 
-    @Enumerated(EnumType.STRING)
-    private ProductStatus status;
+    public ErrorResponse(String error, String message) {
+        this.error = error;
+        this.message = message;
+    }
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "supplier_uuid", nullable = false)
-    private Supplier supplier;
-
+    // Getters and setters
 }
